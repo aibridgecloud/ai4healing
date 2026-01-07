@@ -49,8 +49,7 @@
         const idCard = document.getElementById('idCard').value;
         const password = document.getElementById('password').value;
 
-        // 构建跳转URL (注意：实际开发中敏感数据建议通过POST请求或加密)
-        // 这里演示简单的URL参数传参
+        // 构建跳转URL 
         const targetUrl = `index.html?phone=${encodeURIComponent(phone)}&idCard=${encodeURIComponent(idCard)}&password=${encodeURIComponent(password)}`;
         
         // 执行跳转
