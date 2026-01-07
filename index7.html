@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理咨询师基础培训·全能备考门户</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --warning: #f39c12;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; margin: 0; background-color: var(--bg); color: #333; }
+        header { background: var(--primary); color: white; padding: 2.5rem 1rem; text-align: center; }
+        .container { max-width: 1000px; margin: -20px auto 40px; padding: 30px; background: var(--white); border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        
+        h2.section-title { border-left: 6px solid var(--accent); padding-left: 15px; margin: 40px 0 20px; color: var(--primary); font-size: 1.5rem; }
+        
+        /* 知识图谱卡片 */
+        .map-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .map-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 15px; }
+        .map-card h3 { color: var(--secondary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+
+        /* 习题模块：整行选中 */
+        .quiz-item { background: #fff; border: 1px solid #eee; padding: 25px; border-radius: 8px; margin-bottom: 25px; }
+        .chapter-tag { background: #eef2f7; color: #5d6d7e; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; display: inline-block; }
+        .question-text { font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; display: block; }
+        
+        .option-row { 
+            display: flex; align-items: center; padding: 14px; margin: 10px 0; 
+            background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 8px; 
+            cursor: pointer; transition: all 0.2s; 
+        }
+        .option-row:hover { background: #f0f7ff; border-color: var(--accent); }
+        .option-row.selected { background: #eef7ff; border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+        .option-row input { margin-right: 15px; transform: scale(1.3); pointer-events: none; }
+        
+        .btn-submit { background: var(--accent); color: white; border: none; padding: 12px 35px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 15px; }
+        .btn-submit:disabled { background: #bdc3c7; cursor: not-allowed; }
+        
+        .explanation { display: none; margin-top: 20px; padding: 15px; border-radius: 6px; border-left: 5px solid; font-size: 0.95rem; }
+        .correct-box { background: #e8f5e9; color: #2e7d32; border-left-color: #4caf50; }
+        .wrong-box { background: #ffebee; color: #c62828; border-left-color: #f44336; }
+
+        /* 下载区 */
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .dl-btn { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: #333; transition: 0.2s; }
+        .dl-btn:hover { border-color: var(--warning); background: #fff9f0; transform: translateY(-2px); }
+        .dl-icon { background: var(--warning); color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; }
+
+        footer { text-align: center; padding: 50px; color: #95a5a6; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>心理咨询师基础培训·综合备考门户</h1>
+    <p>全套 9 章作业真题集 · 考点知识图谱 · 在线互动测试</p>
+</header>
+
+<div class="container">
+    
+    <h2 class="section-title">1. 核心知识图谱大纲</h2>
+    <div class="map-grid">
+        <div class="map-card">
+            <h3>第一部分：基础理论</h3>
+            <p>● <b>基础心理学</b>：冯特(1879)科学心理学标志、华生行为主义(S-R)。</p>
+            <p>● <b>社会心理学</b>：勒温公式 $B=f(P,E)$、霍兰德三阶段(哲学、经验、实证)。</p>
+            <p>● <b>发展心理学</b>：皮亚杰相互作用论、艾里克森人格八阶段。</p>
+            
+        </div>
+        <div class="map-card">
+            <h3>第二部分：临床与实务</h3>
+            <p>● <b>变态心理学</b>：区分原则(统一性、协调性、稳定性)、中介系统。</p>
+            <p>● <b>咨询伦理</b>：Welfel九步骤、多重关系回避、转介原则。</p>
+            <p>● <b>咨询方法</b>：阳性强化(行为)、合理情绪疗法(ABCDE模型)。</p>
+            
+        </div>
+    </div>
+
+    <h2 class="section-title">2. 全章节在线练习 (九章全覆盖/整行点击)</h2>
+    <div id="quizApp">
+        <div class="quiz-item" id="q1">
+            <span class="chapter-tag">第1章 基础心理学</span>
+            <span class="question-text">1. 科学心理学的创始人是（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="C"> C. W.冯特</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="D"> D. S.弗洛伊德</div>
+            <button class="btn-submit" onclick="checkAnswer('q1', 'C', '1879年冯特在莱比锡大学建立第一个实验室，标志着科学心理学诞生。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q2">
+            <span class="chapter-tag">第2章 社会心理学</span>
+            <span class="question-text">2. 根据霍兰德的观点，社会心理学的形成期是在（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="C"> C. 经验描述阶段</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="D"> D. 实证分析阶段</div>
+            <button class="btn-submit" onclick="checkAnswer('q2', 'C', '1908年罗斯和麦独孤的专著出版标志着经验描述阶段（形成期）的开始。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q3">
+            <span class="chapter-tag">第3章 发展心理学</span>
+            <span class="question-text">3. 艾里克森认为童年期（7-12岁）的主要发展任务是获得（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="A"> A. 勤奋感，克服自卑感</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="C"> C. 自主感，克服羞耻感</div>
+            <button class="btn-submit" onclick="checkAnswer('q3', 'A', '7-12岁为勤奋对自卑阶段。自主感对羞耻感是婴儿后期（1.5-3岁）的任务。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q4">
+            <span class="chapter-tag">第4章 变态心理学</span>
+            <span class="question-text">4. 弗洛伊德认为，“本我”的活动原则是（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="A"> A. 现实原则</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="C"> C. 快乐原则</div>
+            <button class="btn-submit" onclick="checkAnswer('q4', 'C', '本我-快乐原则；自我-现实原则；超我-道德原则。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q6">
+            <span class="chapter-tag">第6章 心理咨询伦理</span>
+            <span class="question-text">5. 心理咨询师要尽可能避免与来访者发生（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="B"> B. 多重关系</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="C"> C. 职业关系</div>
+            <button class="btn-submit" onclick="checkAnswer('q6', 'B', '伦理守则规定应尽量避免多重关系，以防损害咨询师的专业判断。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q7">
+            <span class="chapter-tag">第7章 心理评估</span>
+            <span class="question-text">6. 心理咨询师与求助者之间的交往距离属于（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="B"> B. 社交距离</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="C"> C. 个人距离</div>
+            <button class="btn-submit" onclick="checkAnswer('q7', 'B', '心理咨询属于职业交往，适用社交距离（4-12英尺）。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q9">
+            <span class="chapter-tag">第9章 心理咨询方法</span>
+            <span class="question-text">7. 在合理情绪疗法（RET）中，对“黄金规则”的正确理解是（ ）。</span>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="B"> B. 我对别人怎样，别人必须对我怎样</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="C"> C. 像你希望别人如何对待你那样去对待别人</div>
+            <button class="btn-submit" onclick="checkAnswer('q9', 'C', '黄金规则是“像你希望别人如何对待你那样去对待别人”，B项属于绝对化要求的反黄金规则。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+    </div>
+
+    <h2 class="section-title">3. 原版 PDF 资料下载 (新页面打开预览)</h2>
+    <div class="download-grid">
+        <a href="第一章-基础心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>1. 基础心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第二章-社会心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>2. 社会心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第三章-发展心理学单元作业题(2).pdf" target="_blank" class="dl-btn"><span>3. 发展心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第四章-变态心理学单元作业题(3).pdf" target="_blank" class="dl-btn"><span>4. 变态心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第五章-心理咨询概论单元作业题(2).pdf" target="_blank" class="dl-btn"><span>5. 心理咨询概论</span><span class="dl-icon">PDF</span></a>
+        <a href="第六章 心理咨询伦理单元作业题(2).pdf" target="_blank" class="dl-btn"><span>6. 心理咨询伦理</span><span class="dl-icon">PDF</span></a>
+        <a href="第七章 心理评估单元作业题(2).pdf" target="_blank" class="dl-btn"><span>7. 心理评估</span><span class="dl-icon">PDF</span></a>
+        <a href="第八章 心理咨询基本技能单元作业题(2).pdf" target="_blank" class="dl-btn"><span>8. 咨询基本技能</span><span class="dl-icon">PDF</span></a>
+        <a href="第九章 心理咨询方法单元作业题(2).pdf" target="_blank" class="dl-btn"><span>9. 咨询方法</span><span class="dl-icon">PDF</span></a>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 心理咨询师备考服务系统 | 资料源自中科院心理所培训项目</p>
+</footer>
+
+<script>
+    // 逻辑1：整行选中交互
+    function selectRow(el) {
+        // 找到当前题目的所有选项并重置
+        const container = el.parentElement;
+        const rows = container.querySelectorAll('.option-row');
+        rows.forEach(r => r.classList.remove('selected'));
+        
+        // 选中当前点击行
+        el.classList.add('selected');
+        const input = el.querySelector('input');
+        input.checked = true;
+    }
+
+    // 逻辑2：判题功能
+    function checkAnswer(qid, correct, note) {
+        const item = document.getElementById(qid);
+        const checked = item.querySelector('input:checked');
+        const exp = item.querySelector('.explanation');
+        
+        if(!checked) {
+            alert("请选择一个答案后再提交哦！");
+            return;
+        }
+
+        exp.style.display = "block";
+        if(checked.value === correct) {
+            exp.className = "explanation correct-box";
+            exp.innerHTML = "<b>✅ 正确！</b><br>" + note;
+        } else {
+            exp.className = "explanation wrong-box";
+            exp.innerHTML = "<b>❌ 错误。</b> 正确答案是 " + correct + "。<br>" + note;
+        }
+        
+        // 提交后锁定该题
+        item.querySelector('.btn-submit').disabled = true;
+        item.querySelectorAll('.option-row').forEach(r => r.style.pointerEvents = "none");
+    }
+</script>
+
+</body>
+</html>

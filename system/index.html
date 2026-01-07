@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理咨询师基础培训考试 - 综合服务门户</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --warning: #e67e22;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; margin: 0; background-color: var(--light); color: #333; }
+        header { background: var(--primary); color: white; padding: 3rem 1rem; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .container { max-width: 1100px; margin: -30px auto 40px; padding: 30px; background: var(--white); border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
+        
+        h2.section-title { border-left: 6px solid var(--accent); padding-left: 15px; margin: 40px 0 20px; color: var(--primary); font-size: 1.5rem; }
+        
+        /* 导航 */
+        nav { text-align: center; margin-bottom: 30px; }
+        nav a { margin: 0 15px; text-decoration: none; color: var(--accent); font-weight: bold; }
+
+
+        .info-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        /* 知识图谱样式 */
+        .map-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .map-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 15px; }
+        .map-card h3 { color: var(--secondary); margin-top: 0; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+        .map-card details { margin: 10px 0; cursor: pointer; }
+        .map-card summary { font-weight: bold; color: #444; }
+        .map-card p { font-size: 0.9rem; color: #666; margin: 5px 0 10px 20px; }
+
+        /* 机构查询 */
+        .query-box { background: #eef2f7; padding: 25px; border-radius: 8px; margin: 20px 0; }
+        select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        #resultList { list-style: none; padding: 0; margin-top: 15px; background: white; border-radius: 6px; max-height: 250px; overflow-y: auto; border: 1px solid #ddd; }
+        #resultList li { padding: 12px 15px; border-bottom: 1px solid #eee; }
+
+        /* 在线习题 */
+        .quiz-item { background: #fff; border: 1px solid #eee; padding: 25px; border-radius: 8px; margin-bottom: 25px; transition: 0.3s; }
+        .quiz-item:hover { border-color: #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .question-text { font-weight: bold; font-size: 1.1rem; color: #2c3e50; margin-bottom: 15px; }
+        .tag-chapter { background: #eef2f7; color: #555; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-right: 10px; }
+        
+        /* 整行选中样式 */
+        .option-row { 
+            display: flex; align-items: center; padding: 15px; margin: 10px 0; 
+            background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 8px; 
+            cursor: pointer; transition: 0.2s; 
+        }
+        .option-row:hover { background: #f0f7ff; border-color: var(--accent); }
+        .option-row.selected { background: #eef7ff; border-color: var(--accent); }
+        .option-row input { margin-right: 15px; transform: scale(1.2); pointer-events: none; }
+        
+        .btn-submit { background: var(--accent); color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .explanation { display: none; margin-top: 20px; padding: 15px; border-radius: 6px; border-left: 5px solid; }
+        .correct-box { background: #e8f5e9; color: #2e7d32; border-left-color: #4caf50; }
+        .wrong-box { background: #ffebee; color: #c62828; border-left-color: #f44336; }
+
+        /* 下载区 */
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .dl-btn { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: #333; }
+        .dl-btn:hover { border-color: var(--warning); background: #fff9f0; transform: translateY(-2px); }
+        .dl-icon { background: var(--warning); color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; }
+
+        footer { text-align: center; padding: 50px; color: #888; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>心理咨询师基础培训考试系统</h1>
+    <p>集成资料、查询、学习与模拟测试于一体的备考门户</p>
+</header>
+
+<div class="container">
+    <nav>
+        <a href="#map">知识图谱</a> | 
+        <a href="#query">机构查询</a> | 
+        <a href="#quiz">模拟测试</a> | 
+        <a href="#download">资料下载</a>
+    </nav>
+
+    <h2 class="section-title" id="map">备考知识图谱（基于单元作业考点）</h2>
+    <div class="map-container">
+        <div class="map-card">
+            <h3>基础理论篇</h3>
+            <details open>
+                <summary>基础 & 社会心理学</summary>
+                <p>● 科学心理学诞生标志：1879年冯特在莱比锡建立实验室。</p>
+                <p>● 社会行为公式：$B=f(P,E)$，其中P是个体，E是情境。</p>
+                <p>● 霍兰德三阶段：哲学思辨、经验描述、实证分析。</p>
+            </details>
+            <details  open>
+                <summary>发展 & 变态心理学</summary>
+                <p>● 皮亚杰：认知发展是主体与客体相互作用的结果。</p>
+                <p>● 艾里克森：童年期(7-12岁)任务是获得勤奋感，克服自卑感。</p>
+                <p>● 压力的中介系统：认知、社会支持、生物调节系统。</p>
+            </details>
+        </div>
+        <div class="map-card">
+            <h3>操作技能篇</h3>
+            <details open>
+                <summary>基本技能 & 评估</summary>
+                <p>● 咨询态度五要素：尊重、热情、真诚、共情、积极关注。</p>
+                <p>● 交往距离：心理咨询属于“社交距离”（4-12英尺）。</p>
+                <p>● 参与性技术：倾听、询问、内容反应、情感反应。</p>
+            </details>
+            <details>
+                <summary>咨询方法 & 伦理</summary>
+                <p>● 合理情绪疗法：ABCDE模型。黄金规则是“像你希望别人如何对待你那样去对待别人”。</p>
+                <p>● 专业伦理：Welfel 九步骤伦理决定模式；尽可能避免多重关系。</p>
+            </details>
+        </div>
+    </div>
+
+    
+
+<h2 class="section-title">全章节在线习题 (支持整行选中)</h2>
+<details style="cursor: pointer; background: #fff; border: 1px solid #eee; border-radius: 8px; padding: 10px;">
+    <summary style="font-weight: bold; padding: 10px; color: var(--accent);">点击展开/折叠模拟测试题</summary>
+
+    <div id="quizContainer">
+        
+        <div class="quiz-item" id="q1">
+            <div class="question-text"><span class="tag-chapter">第一章 基础心理学</span>行为主义心理学的创始人华生认为，心理学研究的任务在于查明（ ）之间的规律性关系。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="A"> A. 意识与无意识</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="B"> B. 刺激与反应 (S-R)</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="C"> C. 主体与客体</div>
+            <button class="btn-submit" onclick="checkAnswer('q1', 'B', '华生主张心理学应抛弃意识，查明刺激与反应之间的关系。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q2">
+            <div class="question-text"><span class="tag-chapter">第二章 社会心理学</span>社会心理学的形成期是在（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="A"> A. 社会哲学阶段</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="B"> B. 哲学思辨阶段</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="C"> C. 经验描述阶段</div>
+            <button class="btn-submit" onclick="checkAnswer('q2', 'C', '霍兰德认为经验描述阶段是社会心理学的形成期，标志是1908年两本教科书出版。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q3">
+            <div class="question-text"><span class="tag-chapter">第三章 发展心理学</span>皮亚杰认为心理发展是主体与客体相互作用的结果，这种观点属于（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="A"> A. 相互作用论</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="B"> B. 环境决定论</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="C"> C. 遗传决定论</div>
+            <button class="btn-submit" onclick="checkAnswer('q3', 'A', '皮亚杰主张内因和外因相互作用的发展观。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q4">
+            <div class="question-text"><span class="tag-chapter">第四章 变态心理学</span>弗洛伊德认为，本我的活动原则是（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="A"> A. 现实原则</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="B"> B. 道德原则</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="C"> C. 快乐原则</div>
+            <button class="btn-submit" onclick="checkAnswer('q4', 'C', '本我按快乐原则活动，自我按现实原则，超我按道德原则。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q5">
+            <div class="question-text"><span class="tag-chapter">第五章 心理咨询概论</span>精神分析理论被称为“深层心理学”是因为它强调（ ）的作用。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="A"> A. 意识活动</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="B"> B. 潜意识活动</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="C"> C. 前意识活动</div>
+            <button class="btn-submit" onclick="checkAnswer('q5', 'B', '弗洛伊德强调深层的潜意识对人类心理的作用，故称。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q6">
+            <div class="question-text"><span class="tag-chapter">第六章 心理咨询伦理</span>Welfel (1998) 提出的伦理决定模式共有（ ）个步骤。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="A"> A. 七个</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="B"> B. 八个</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="C"> C. 九个</div>
+            <button class="btn-submit" onclick="checkAnswer('q6', 'C', 'Welfel提出的伦理决定模式为九步骤。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q7">
+            <div class="question-text"><span class="tag-chapter">第七章 心理评估</span>心理咨询师与求助者之间的交往距离属于（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="A"> A. 亲密距离</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="B"> B. 社交距离</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="C"> C. 公众距离</div>
+            <button class="btn-submit" onclick="checkAnswer('q7', 'B', '咨询属于职业关系，适用社交距离（4-12英尺）。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q8">
+            <div class="question-text"><span class="tag-chapter">第八章 基本技能</span>正确的咨询态度包括五个要素：尊重、热情、真诚、共情和（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="A"> A. 积极关注</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="B"> B. 心理测验</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="C"> C. 职业背景</div>
+            <button class="btn-submit" onclick="checkAnswer('q8', 'A', '态度五要素是尊重、热情、真诚、共情、积极关注。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q9">
+            <div class="question-text"><span class="tag-chapter">第九章 咨询方法</span>在合理情绪疗法（RET）中，“黄金规则”是指（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="A"> A. 我对别人怎样，别人也必须对我怎样</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="B"> B. 像你希望别人如何对待你那样去对待别人</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="C"> C. 别人必须尊重我的所有愿望</div>
+            <button class="btn-submit" onclick="checkAnswer('q9', 'B', '黄金规则是典型的换位思考，而非对他人的绝对化要求。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+    </div>
+</details>
+
+    <h2 class="section-title">单元作业题资料下载区 (点击新页面打开 PDF)</h2>
+    <div class="download-grid">
+        <a href="第一章-基础心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>1. 基础心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第二章-社会心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>2. 社会心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第三章-发展心理学单元作业题(2).pdf" target="_blank" class="dl-btn"><span>3. 发展心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第四章-变态心理学单元作业题(3).pdf" target="_blank" class="dl-btn"><span>4. 变态心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第五章-心理咨询概论单元作业题(2).pdf" target="_blank" class="dl-btn"><span>5. 心理咨询概论</span><span class="dl-icon">PDF</span></a>
+        <a href="第六章 心理咨询伦理单元作业题(2).pdf" target="_blank" class="dl-btn"><span>6. 心理咨询伦理</span><span class="dl-icon">PDF</span></a>
+        <a href="第七章 心理评估单元作业题(2).pdf" target="_blank" class="dl-btn"><span>7. 心理评估</span><span class="dl-icon">PDF</span></a>
+        <a href="第八章 心理咨询基本技能单元作业题(2).pdf" target="_blank" class="dl-btn"><span>8. 咨询基本技能</span><span class="dl-icon">PDF</span></a>
+        <a href="第九章 心理咨询方法单元作业题(2).pdf" target="_blank" class="dl-btn"><span>9. 心理咨询方法</span><span class="dl-icon">PDF</span></a>
+    </div>
+
+    <h2 class="section-title">考前串讲资料下载区 (点击新页面打开 PDF)</h2>
+    <div class="download-grid">
+        <a href="考前串讲/愈见基础心理学考点串讲.pdf" target="_blank" class="dl-btn"><span>1. 基础心理学-考点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/考前班发展考点串讲4.16.pdf" target="_blank" class="dl-btn"><span>2. 发展心理学-考点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/考前串讲-社会心理学知识点串讲.pdf" target="_blank" class="dl-btn"><span>3. 社会心理学-知识点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/考前串讲-变态心理学知识点串讲.pdf" target="_blank" class="dl-btn"><span>4. 变态心理学-知识点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/考前串讲-人格心理学考点串讲.pdf" target="_blank" class="dl-btn"><span>5. 人格心理学-考点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/心理咨询概论考点串讲.pdf" target="_blank" class="dl-btn"><span>6. 心理咨询概论-考点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/考前串讲-心理评估概论知识点串讲.pdf" target="_blank" class="dl-btn"><span>7. 心理评估概论-知识点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/《心理咨询技能和方法》考点串讲.pdf" target="_blank" class="dl-btn"><span>8. 咨询技能方法-考点串讲</span><span class="dl-icon">PDF</span></a>
+        <a href="考前串讲/心理咨询专业伦理-知识串讲.pdf" target="_blank" class="dl-btn"><span>9. 心理咨询伦理-知识串讲</span><span class="dl-icon">PDF</span></a>
+
+        <a href="考前串讲/愈见基础心理学真题串讲.pdf" target="_blank" class="dl-btn"><span>10. 基础心理学-真题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/考前班发展习题串讲4.16.pdf" target="_blank" class="dl-btn"><span>11. 发展心理学-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/考前串讲-社会心理学习题串讲.pdf" target="_blank" class="dl-btn"><span>12. 社会心理学-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/考前串讲-变态心理学习题串讲.pdf" target="_blank" class="dl-btn"><span>13. 变态心理学-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/考前串讲-人格心理学习题串讲.pdf" target="_blank" class="dl-btn"><span>14. 人格心理学-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/心理咨询概论习题串讲.pdf" target="_blank" class="dl-btn"><span>15. 心理咨询概论-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/考前串讲-心理评估概论习题串讲.pdf" target="_blank" class="dl-btn"><span>16. 心理评估概论-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/《心理咨询技能和方法》习题串讲.pdf" target="_blank" class="dl-btn"><span>17. 咨询技能方法-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+        <a href="考前串讲/心理咨询专业伦理-习题串讲.pdf" target="_blank" class="dl-btn"><span>18. 心理咨询伦理-习题串讲</span><span class="dl-icon" style="background: #27ae60;">习题</span></a>
+
+        <a href="考前串讲/2022年最新题库pdf版本.rar" target="_blank" class="dl-btn"><span>【包】2022最新题库</span><span class="dl-icon" style="background: #8e44ad;">RAR</span></a>
+        <a href="考前串讲/真题试卷及答案解析.rar" target="_blank" class="dl-btn"><span>【包】真题及答案解析</span><span class="dl-icon" style="background: #8e44ad;">RAR</span></a>
+        <a href="考前串讲/思维导图-测试说明.rar" target="_blank" class="dl-btn"><span>【包】思维导图及说明</span><span class="dl-icon" style="background: #8e44ad;">RAR</span></a>
+    </div>
+
+ <h2 class="section-title">报考流程简介</h2>
+    <p>心理咨询师考试通常不接受个人报名，必须通过<b>授权的培训机构</b>完成规定学时的培训后，由机构统一组织集体报名。</p>
+    
+    <div class="info-card">
+        <div class="card">
+            <h4>1. 确认条件</h4>
+            <p>大专及以上学历、在校大学生或具有相关职称。</p>
+        </div>
+        <div class="card">
+            <h4>2. 选定机构</h4>
+            <p>从官方授权名单中选择您所在地区的培训机构。</p>
+        </div>
+    </div>
+
+
+
+    <h2 class="section-title" id="query">授权培训机构联动查询</h2>
+    <div class="query-box">
+        <p>请选择您所在的省份，查看受中科院心理所等机构认可的培训单位：</p>
+        <select id="provinceSelect">
+            <option value="">-- 点击选择省份 --</option>
+        </select>
+        <ul id="resultList">
+            <li style="color: #999; text-align: center;">选择省份后此处显示机构名单</li>
+        </ul>
+    </div>
+
+    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #eee;">
+
+心理咨询基础项目已停运，获得证书的学员可前往 https://zscx.psych.ac.cn/ 查询。如有需要可拨打010-64845775咨询。
+
+</div>
+
+<footer>
+    <p>© 2026 心理咨询师备考服务系统 | 考点提炼自官方单元作业</p>
+
+			<p onclick="window.open('https://beian.miit.gov.cn/')" style="cursor:pointer;">京ICP备10049795号-1</p>
+			<p>京公网安备110402500018号</p>
+			
+			<div style="display:inline-block;vertical-align:middle;">
+			<img style="border-width:0;" src="images/blue.png"/>
+			</div>
+			
+</footer>
+
+<script>
+    // 1. 机构查询逻辑
+  //  var Apro = ["北京","天津","河北","山西","内蒙古","辽宁","吉林","黑龙江","上海","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","广西","海南","重庆","四川","贵州","云南","陕西","甘肃","青海","宁夏","新疆","行业"];
+   // var Aorg = [["北京华夏思源科技发展有限公司","北京金宁教育咨询有限公司","京师博仁（北京）教育科技中心"],["华人（天津）心理咨询有限公司","天津学文教育科技有限公司"],["沧州市思源职业培训学校","石家庄市天心心理咨询"],["临汾市心理咨询师协会","山西心悦"],["包头市陈欣心理培训"],["大连红叶职业培训","沈阳智虹"],["长春思源教育"],["哈尔滨曲伟杰心理学校"],["上海德瑞姆培训"],["常州全人教育","南京优路教育"],["杭州袋虎信息技术"],["安徽省播健职业培训"],["泉州心怡心理"],["江西南大心理培训"],["滨州市心理咨询师协会","山东省社会心理学会"],["河南心能量"],["湖北省心理咨询师协会"],["湖南省会天职业培训"],["广州上馨心理","深圳市瀚思职业培训"],["北海市心理咨询师协会"],["海南海大源职业培训"],["重庆爱源心理咨询"],["成都华商职业技能培训"],["贵阳市亚夫心理健康"],["云南民航教育培训学院"],["陕西海尔森培训学校"],["甘肃省心理咨询师学会"],["青海易心新技术"],["银川市心理卫生协会"],["新疆泰能职业技能培训"],["深圳市和家心理","中电智联（北京）"]];
+
+ // 注入的数据
+    var Apro = ["北京","天津","河北","山西","内蒙古","辽宁","吉林","黑龙江","上海","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","广西","海南","重庆","四川","贵州","云南","陕西","甘肃","青海","宁夏","新疆","行业"];
+    var Aorg = [["北京华夏思源科技发展有限公司","北京金宁教育咨询有限公司","北京市海淀区方圆心理健康服务中心","北京市技术交流职业技能培训学校","北京心之助科技发展有限公司","北京正尚方管理咨询有限公司","北京和文化心理发展研究院","京师博仁（北京）教育科技中心","君安联合（北京）教育科技有限公司","北京育兴教育科技有限责任公司","北京勤勉教育科技有限公司","北京环球优路教育科技股份有限公司","北京心干线科技发展有限公司","北京昊泽朗星国际教育科技有限公司","北京曼德卓瑞教育科技有限公司","北京飞迪曼管理咨询有限公司","北京启文卓越教育咨询有限责任公司"],["华人（天津）心理咨询有限公司","天津津师培训学校有限责任公司","天津学文教育科技有限公司","学而知教育科技（天津）有限公司","五季心理咨询（天津）有限责任公司","天津市一方职业培训学校","天津华利培训学校有限公司","天津中科正源教育咨询有限公司","天津有佳教育信息咨询有限公司","天津听心教育信息咨询有限公司","天津河西区典亮培训学校有限责任公司"],["沧州市思源职业培训学校","石家庄市天心心理咨询有限责任公司","河北明琪珊健康管理咨询有限公司","河北行之学心理咨询有限公司","石家庄市德中心理咨询中心","石家庄市金博瑞职业技能培训学校","唐山市鸿达职业技能培训学校","邢台市阳光心苑职业培训学校","张家口心理学会","保定市幸福心理学会","承德市辅为教育中心","石家庄久航教育科技有限公司","河北沐之光教育科技有限公司","衡水领度心理咨询服务有限公司","沧州瑞利屋健康咨询有限责任公司"],["临汾市心理咨询师协会","山西心悦心理咨询研究中心","朔州市心理咨询师协会","太原万福心理咨询有限公司","忻州市润心教育咨询有限公司","运城市龙飞职业培训学校","大同市平城区知音心理工作室","山西泾明堂心理健康研究中心","山西和合永晟文化交流有限公司","长治应用心理研究所","山西紫煦心理咨询有限公司","山西阳煦心理服务有限公司","晋城市康复医院","山西省团体心理治疗学会","运城师范高等专科学校"],["包头市陈欣心理咨询职业培训学校","赤峰市心理卫生协会","内蒙古德蕾心理咨询有限责任公司","内蒙古新动力心理职业培训学校","内蒙古润泽教育咨询有限责任公司","通辽市方舟心理咨询职业培训学校","乌兰浩特市幸福力心理咨询中心","呼伦贝尔现代社会心理研究院","内蒙古和之韵心理服务有限责任公司","内蒙古鸿博心理科学研究院","呼和浩特市赛罕区南坡子心理社会工作服务中心"],["大连红叶职业培训学校","大连汇成心理咨询职业培训学校","大连市尚德职业培训学校","锦州市心理咨询师协会","辽宁省人和职业培训学校","辽宁省信德职业培训学校","沈阳海润心理咨询职业培训学校","沈阳沈信心理学校","沈阳市精卫心理培训学校","沈阳市助力生活职业技能培训学校","沈阳智虹职业培训学校","丹东市科教职业培训学校","沈阳市和平区安博尔职业培训学校","盘锦市搏博职业培训学校","丹东市新方向职业培训学校"],["长春思源教育科技发展有限公司","吉林省明华心理咨询师职业培训学校","吉林省仁爱心理保健职业培训学校","吉林省睿哲思心理咨询有限责任公司","吉林省中小学生家庭教育促进会","四平市铁西区爱心田教育咨询服务中心","四平市真格职业培训学校","集安市志成教育培训有限公司","吉林省普阳心理健康服务中心（普通合伙）","四平市铁西区北方心理咨询有限公司"],["哈尔滨市道里区曲伟杰心理学校","哈尔滨市杰心教育咨询有限公司","黑龙江诚爱职业培训学校","大庆市萨尔图区立英职业培训学校","黑龙江新希望职业技能培训学校","牡丹江市谭力心理学校","齐齐哈尔磐松教育咨询中心"],["上海华东人才教育管理（集团）有限公司","上海莱能教育科技有限公司","上海恩勤教育科技有限公司","上海誉好数据技术有限公司","上海德瑞姆职业技能培训有限公司","上海和光心理咨询有限公司"],["常州全人教育信息咨询有限公司","常州天问职业培训学校","连云港市文博职业培训学校","南京林中路文化传播有限公司","苏州常青树教育咨询有限公司","南京共赢职业培训学校","淮安市心理咨询师协会","北京赛优职教育科技有限公司徐州第二分公司","南京优路教育管理咨询有限公司","无锡中合心理咨询有限公司","无锡市源沐心理咨询有限公司","南京师培经济信息咨询服务中心","苏州天创职业培训中心","泰州市阳光心理服务中心","苏州新教育心理培训学校","徐州市一德教育咨询有限公司","无锡悦心教育信息咨询有限公司","南京百昇企业管理培训有限公司","常熟市弘成教育培训中心","扬州益康职业培训学校有限公司","南京欧索职业培训学校","江阴市心理健康协会","宜兴市健康职业培训学校","徐州一言教育咨询有限公司","苏州康德教育咨询有限公司","南京银河培训有限公司","南京远航致远教育科技有限公司"],["杭州袋虎信息技术有限公司","杭州康华心理健康服务有限公司","金华市心怡技能培训有限公司","丽水市柏晖健康科学研究院","宁波市杰诺职业培训学校","温州市心理咨询师协会","舟山市一米阳光职业培训学校","湖州市社会心理学会","杭州心聆护航健康咨询有限公司","心会（金华）教育咨询有限公司","嘉兴市明德职业技能培训学校","杭州市上城区启悦心理健康服务中心","桐庐县心理学会","义乌市汇鸿成人教育培训部有限公司","杭州科创培训学校"],["安徽省播健职业培训有限公司职业培训学校","安徽易点通心理咨询事务所有限公司","蚌埠求是教育职业培训学校","淮南市社会心理学会","马鞍山市树先生教育咨询有限公司","淮北市家庭教育学会","淮南市中科心理研究中心","北京师大教科文教育科技有限公司安徽分公司","安徽省现代心理学研究院","亳州市德慧心理教育咨询有限公司","阜阳市心理健康科普协会","合肥市阳光心健职业培训学校","合肥华思职业培训学校有限公司","安徽锐学教育科技有限公司","合肥中世健职业技能培训学校有限公司"],["泉州心怡心理咨询服务有限公司","厦门市心理咨询师协会","福建省众一泰心理咨询有限公司"],["江西南大心理咨询师职业技能培训中心","江西省心理援助与研究中心","新余市心理学会","九江兰心心理健康咨询有限公司","江西家学教育科技有限公司","遂川县心理健康服务中心","赣州梧桐心理咨询服务有限公司","九江学院","江西心观念文化传媒有限公司","南昌市湾里区中江健康职业培训学校","上饶市信州区环亚职业培训学校"],["滨州市心理咨询师协会","德州市德城区电大培训中心","东营心理咨询师协会","聊城市东昌府区华夏启航培训学校","临沂市丹阳心理咨询研究中心","青岛瑞阳心语心理学应用技术发展有限公司","日照市心理学会","山东省社区教育指导服务中心","山东省社会心理学会","山东圣博达教育咨询管理有限公司","山东同济职业培训学校","泰安市华太劳动职业培训学校","青岛市市北区橡树籽心智发展研究中心","青岛成龙职业培训学校","惠民县艾德职业培训学校","青岛毕希名平衡心理咨询服务有限公司","山东久鼎教育咨询有限公司","山东省心路之光心理咨询有限责任公司","烟台市芝罘区宝创培训学校有限公司","山东聚点教育咨询有限公司","济宁市心理咨询师协会","山东技能桥职业培训学校","山东心海心理咨询有限公司","山东省懿恒心理研究所","山东育秀职业培训学校","青岛大道人力资源开发有限公司","淄博市中小学心理健康研究会","山东浩林教育咨询服务有限公司","菏泽市牡丹区尔学教育培训学校有限公司","济南智联教育咨询有限公司"],["济源市心能量职业培训学校","焦作市心理卫生协会","洛阳市众成职业技术培训学校","漯河市王焯职业技能培训学校","南阳市冯特健民职业培训学校","濮阳市和心职业培训学校","新乡市心理学研究会","郑州乐源心理咨询有限公司","驻马店市阳光职业培训学校","河南心能量心理咨询有限公司","洛阳市应用心理学协会","邓州市新天地职业技术培训学校","洛阳市心理咨询师协会","永城市心理咨询师协会","河南省博颂基础教育研究院","河南心理健康产业发展有限公司"],["湖北省心理咨询师协会","武汉华夏心灵教育咨询有限公司","襄阳全纳心理健康服务中心","宜昌市枫华职业培训学校","湖北至爱婚姻家庭咨询服务有限公司","武汉弘毅博心理研究院","武汉心智云心理科学研究院","武汉珞珈应用心理研究中心","北京中公教育科技有限公司武汉分公司"],["衡阳市心理卫生协会","湖南莲城智源心理咨询有限公司","湖南省会天职业培训学校","天舟文化股份有限公司","怀化市心理交流协会","湖南虎翼文化传播有限公司","湖南纳本心理咨询有限公司","长沙市蓝宇心理职业培训学校","湖南惠湘教育科技发展有限公司","衡阳市纯清心理援助中心","张界心尚心理教育有限公司","郴州市心理咨询师协会"],["广州上馨心理咨询服务有限公司","广州市心理咨询师协会","广东众联万家教育科技有限公司","惠州市芳华心理健康咨询有限公司","汕头市一心健康信息咨询有限公司","希悦心理咨询（中山）有限公司","华夏领创（北京）科技有限公司","茂名茂南区润之教育信息咨询有限公司","心稻田文化传播（深圳）有限公司","深圳绿房子心理咨询有限公司","深心一心理咨询（深圳）有限公司","广州森大教育咨询服务有限公司","广州艾壹丁心理健康咨询有限公司","广东中大职业培训学院","广东省德诚职业培训学院有限公司","广东岭南职业技术学院","广东省百越职业培训学院","广东博思职业培训学院","深圳公共管理教育培训学院","深圳市爱尚时代文化教育有限公司","凯途同创（深圳）教育科技发展有限公司","深圳市瀚思职业培训学校","深圳市金玉心理咨询有限公司"],["北海市心理咨询师协会","广西心理健康发展研究会","防城港市心理健康学会","桂林市和谐心理教育培训学校","广西中燚心理咨询有限公司","贵港市仁爱心理咨询中心","广西爱盈心理咨询有限公司","桂林市嘉鑫心理咨询有限责任公司","钦州市心理咨询师协会"],["海南朗达健康发展有限公司","海南海大源职业培训中心"],["重庆爱源心理咨询有限责任公司","重庆市沙坪坝区驰骋职业培训学校","重庆轩逸心理咨询有限公司","重庆市同呈职业培训学校","重庆市创富管理咨询职业培训学校","重庆三君心理健康研究院","重庆心康心健心理咨询有限公司"],["成都华商职业技能培训学校","乐山莉琳心理咨询有限公司","四川盟略企业管理咨询有限公司","四川幸福西南心理咨询有限公司","雅安适应心理研究所","成都得觉文化传播有限公司","成都职英劳动职业技能培训学校","四川省心理学会","四川省了了心理咨询有限责任公司","成都世纪精英培训学校"],["贵阳市亚夫心理健康服务中心","贵州奕心苑心理科技文化有限公司","黔东南州心理健康教育协会","贵州知之课堂教育科技有限公司","贵阳昊辰职业培训学校"],["昭通市昭阳区慧馨心理咨询中心","石林青松职业培训学校","昆明心路明非医疗性心理咨询有限公司","云南民航教育培训学院","昆明市五华区艾心课外培训学校有限公司","云南未陌央文化传播有限公司","玉溪市华怡心理咨询有限公司","昆明甄迪心理健康咨询有限公司"],["宝鸡协合心理研究院","陕西海尔森培训学校","陕西观心心理咨询服务有限公司","西安沛沛职业技能培训学校","咸阳市心理卫生协会","榆林市心理学研究会","西安市莲湖区随身学职业技能培训学校有限公司","陕西中科教育科技有限公司","西安学府心理咨询服务有限公司","陕西大康心理咨询与心理治疗培训学校","宝鸡市渭滨区正康心理保健院","延安红太阳心理服务中心"],["甘肃彼岸心理咨询有限公司","甘肃省心理咨询师学会","平凉市心理学会","兰州力道咨询服务有限公司"],["青海易心新技术开发有限公司","青海至爱企业管理服务有限公司","西宁市尚博职业培训学校"],["银川市心理卫生协会","北京西红仕教育科技有限公司宁夏分公司"],["石河子华霞职业技能培训学校","新疆泰能职业技能培训学校","哈密市心源心理职业技能培训学校"],["深圳市和家心理咨询技术服务中心","梦课在线（北京）教育科技有限公司","中电智联（北京）管理咨询中心"]];
+
+
+
+    const pSel = document.getElementById('provinceSelect');
+    const rList = document.getElementById('resultList');
+
+    Apro.forEach((name, i) => {
+        let opt = document.createElement('option');
+        opt.value = i; opt.textContent = name;
+        pSel.appendChild(opt);
+    });
+
+    pSel.onchange = function() {
+        rList.innerHTML = '';
+        if(!this.value) { rList.innerHTML = '<li>请选择省份</li>'; return; }
+        (Aorg[this.value] || []).forEach(org => {
+            let li = document.createElement('li');
+            li.textContent = org;
+            rList.appendChild(li);
+        });
+    };
+
+    // 2. 习题逻辑
+        // 习题选中逻辑
+    function selectRow(el) {
+        // 找到当前题目下的所有选项并清除选中状态
+        const parent = el.parentElement;
+        const allRows = parent.querySelectorAll('.option-row');
+        allRows.forEach(row => row.classList.remove('selected'));
+        
+        // 设置当前点击行为选中
+        el.classList.add('selected');
+        el.querySelector('input[type="radio"]').checked = true;
+    }
+
+    // 习题检查逻辑
+    function checkAnswer(qid, correct, note) {
+        const quizBox = document.getElementById(qid);
+        const selected = quizBox.querySelector('input:checked');
+        const exp = quizBox.querySelector('.explanation');
+        
+        if(!selected) {
+            alert("请选择一个答案后再提交！");
+            return;
+        }
+
+        exp.style.display = "block";
+        if(selected.value === correct) {
+            exp.className = "explanation correct-box";
+            exp.innerHTML = "<b>✅ 回答正确！</b><br>" + note;
+        } else {
+            exp.className = "explanation wrong-box";
+            exp.innerHTML = "<b>❌ 回答错误。</b>正确答案是 " + correct + "。<br>" + note;
+        }
+        
+        // 提交后禁用按钮和选择功能
+        quizBox.querySelector('.btn-submit').disabled = true;
+        const rows = quizBox.querySelectorAll('.option-row');
+        rows.forEach(r => r.style.pointerEvents = "none");
+    }
+</script>
+
+</body>
+</html>

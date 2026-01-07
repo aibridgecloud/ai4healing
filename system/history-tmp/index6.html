@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理咨询师基础培训考试 - 考证全能门户</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; margin: 0; background-color: var(--light); color: #333; }
+        header { background: var(--primary); color: white; padding: 2.5rem 1rem; text-align: center; }
+        .container { max-width: 1000px; margin: -20px auto 40px; padding: 30px; background: var(--white); border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        
+        h2.section-title { border-left: 6px solid var(--accent); padding-left: 15px; margin: 40px 0 20px; color: var(--primary); font-size: 1.5rem; }
+        
+        /* 习题模块 */
+        .quiz-item { background: #fff; border: 1px solid #eee; padding: 25px; border-radius: 8px; margin-bottom: 25px; transition: 0.3s; }
+        .quiz-item:hover { border-color: #ddd; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .question-text { font-weight: bold; font-size: 1.1rem; color: #2c3e50; margin-bottom: 15px; }
+        .tag-chapter { background: #eef2f7; color: #555; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-right: 10px; }
+        
+        /* 整行选中样式 */
+        .option-row { 
+            display: flex; align-items: center; padding: 15px; margin: 10px 0; 
+            background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 8px; 
+            cursor: pointer; transition: 0.2s; 
+        }
+        .option-row:hover { background: #f0f7ff; border-color: var(--accent); }
+        .option-row.selected { background: #eef7ff; border-color: var(--accent); }
+        .option-row input { margin-right: 15px; transform: scale(1.2); pointer-events: none; }
+        
+        .btn-submit { background: var(--accent); color: white; border: none; padding: 12px 30px; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 10px; }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .explanation { display: none; margin-top: 20px; padding: 15px; border-radius: 6px; border-left: 5px solid; }
+        .correct-box { background: #e8f5e9; color: #2e7d32; border-left-color: #4caf50; }
+        .wrong-box { background: #ffebee; color: #c62828; border-left-color: #f44336; }
+
+        /* 下载区 */
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+        .dl-btn { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: #333; }
+        .dl-btn:hover { border-color: var(--warning); background: #fff9f0; transform: translateY(-2px); }
+        .dl-icon { background: var(--warning); color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; }
+
+        footer { text-align: center; padding: 50px; color: #888; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>心理咨询师基础培训·在线学习门户</h1>
+    <p>整合 9 大章节习题集与核心考点</p>
+</header>
+
+<div class="container">
+    
+    <h2 class="section-title">核心考点图谱</h2>
+    
+    
+
+    <h2 class="section-title">全章节在线习题 (支持整行选中)</h2>
+    <div id="quizContainer">
+        
+        <div class="quiz-item" id="q1">
+            <div class="question-text"><span class="tag-chapter">第一章 基础心理学</span>行为主义心理学的创始人华生认为，心理学研究的任务在于查明（ ）之间的规律性关系。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="A"> A. 意识与无意识</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="B"> B. 刺激与反应 (S-R)</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="C"> C. 主体与客体</div>
+            <button class="btn-submit" onclick="checkAnswer('q1', 'B', '华生主张心理学应抛弃意识，查明刺激与反应之间的关系。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q2">
+            <div class="question-text"><span class="tag-chapter">第二章 社会心理学</span>社会心理学的形成期是在（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="A"> A. 社会哲学阶段</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="B"> B. 哲学思辨阶段</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="C"> C. 经验描述阶段</div>
+            <button class="btn-submit" onclick="checkAnswer('q2', 'C', '霍兰德认为经验描述阶段是社会心理学的形成期，标志是1908年两本教科书出版。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q3">
+            <div class="question-text"><span class="tag-chapter">第三章 发展心理学</span>皮亚杰认为心理发展是主体与客体相互作用的结果，这种观点属于（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="A"> A. 相互作用论</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="B"> B. 环境决定论</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q3" value="C"> C. 遗传决定论</div>
+            <button class="btn-submit" onclick="checkAnswer('q3', 'A', '皮亚杰主张内因和外因相互作用的发展观。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q4">
+            <div class="question-text"><span class="tag-chapter">第四章 变态心理学</span>弗洛伊德认为，本我的活动原则是（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="A"> A. 现实原则</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="B"> B. 道德原则</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q4" value="C"> C. 快乐原则</div>
+            <button class="btn-submit" onclick="checkAnswer('q4', 'C', '本我按快乐原则活动，自我按现实原则，超我按道德原则。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q5">
+            <div class="question-text"><span class="tag-chapter">第五章 心理咨询概论</span>精神分析理论被称为“深层心理学”是因为它强调（ ）的作用。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="A"> A. 意识活动</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="B"> B. 潜意识活动</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q5" value="C"> C. 前意识活动</div>
+            <button class="btn-submit" onclick="checkAnswer('q5', 'B', '弗洛伊德强调深层的潜意识对人类心理的作用，故称。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q6">
+            <div class="question-text"><span class="tag-chapter">第六章 心理咨询伦理</span>Welfel (1998) 提出的伦理决定模式共有（ ）个步骤。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="A"> A. 七个</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="B"> B. 八个</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="C"> C. 九个</div>
+            <button class="btn-submit" onclick="checkAnswer('q6', 'C', 'Welfel提出的伦理决定模式为九步骤。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q7">
+            <div class="question-text"><span class="tag-chapter">第七章 心理评估</span>心理咨询师与求助者之间的交往距离属于（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="A"> A. 亲密距离</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="B"> B. 社交距离</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q7" value="C"> C. 公众距离</div>
+            <button class="btn-submit" onclick="checkAnswer('q7', 'B', '咨询属于职业关系，适用社交距离（4-12英尺）。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q8">
+            <div class="question-text"><span class="tag-chapter">第八章 基本技能</span>正确的咨询态度包括五个要素：尊重、热情、真诚、共情和（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="A"> A. 积极关注</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="B"> B. 心理测验</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q8" value="C"> C. 职业背景</div>
+            <button class="btn-submit" onclick="checkAnswer('q8', 'A', '态度五要素是尊重、热情、真诚、共情、积极关注。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+        <div class="quiz-item" id="q9">
+            <div class="question-text"><span class="tag-chapter">第九章 咨询方法</span>在合理情绪疗法（RET）中，“黄金规则”是指（ ）。</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="A"> A. 我对别人怎样，别人也必须对我怎样</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="B"> B. 像你希望别人如何对待你那样去对待别人</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q9" value="C"> C. 别人必须尊重我的所有愿望</div>
+            <button class="btn-submit" onclick="checkAnswer('q9', 'B', '黄金规则是典型的换位思考，而非对他人的绝对化要求。')">提交答案</button>
+            <div class="explanation"></div>
+        </div>
+
+    </div>
+
+    <h2 class="section-title">资料下载区 (点击新页面打开 PDF)</h2>
+    <div class="download-grid">
+        <a href="第一章-基础心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>1. 基础心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第二章-社会心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>2. 社会心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第三章-发展心理学单元作业题(2).pdf" target="_blank" class="dl-btn"><span>3. 发展心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第四章-变态心理学单元作业题(3).pdf" target="_blank" class="dl-btn"><span>4. 变态心理学</span><span class="dl-icon">PDF</span></a>
+        <a href="第五章-心理咨询概论单元作业题(2).pdf" target="_blank" class="dl-btn"><span>5. 心理咨询概论</span><span class="dl-icon">PDF</span></a>
+        <a href="第六章 心理咨询伦理单元作业题(2).pdf" target="_blank" class="dl-btn"><span>6. 心理咨询伦理</span><span class="dl-icon">PDF</span></a>
+        <a href="第七章 心理评估单元作业题(2).pdf" target="_blank" class="dl-btn"><span>7. 心理评估</span><span class="dl-icon">PDF</span></a>
+        <a href="第八章 心理咨询基本技能单元作业题(2).pdf" target="_blank" class="dl-btn"><span>8. 咨询基本技能</span><span class="dl-icon">PDF</span></a>
+        <a href="第九章 心理咨询方法单元作业题(2).pdf" target="_blank" class="dl-btn"><span>9. 心理咨询方法</span><span class="dl-icon">PDF</span></a>
+    </div>
+
+</div>
+
+<footer>
+    <p>© 2026 心理咨询师备考服务助手 | 习题来源于中科院心理所培训项目</p>
+</footer>
+
+<script>
+    // 习题选中逻辑
+    function selectRow(el) {
+        // 找到当前题目下的所有选项并清除选中状态
+        const parent = el.parentElement;
+        const allRows = parent.querySelectorAll('.option-row');
+        allRows.forEach(row => row.classList.remove('selected'));
+        
+        // 设置当前点击行为选中
+        el.classList.add('selected');
+        el.querySelector('input[type="radio"]').checked = true;
+    }
+
+    // 习题检查逻辑
+    function checkAnswer(qid, correct, note) {
+        const quizBox = document.getElementById(qid);
+        const selected = quizBox.querySelector('input:checked');
+        const exp = quizBox.querySelector('.explanation');
+        
+        if(!selected) {
+            alert("请选择一个答案后再提交！");
+            return;
+        }
+
+        exp.style.display = "block";
+        if(selected.value === correct) {
+            exp.className = "explanation correct-box";
+            exp.innerHTML = "<b>✅ 回答正确！</b><br>" + note;
+        } else {
+            exp.className = "explanation wrong-box";
+            exp.innerHTML = "<b>❌ 回答错误。</b>正确答案是 " + correct + "。<br>" + note;
+        }
+        
+        // 提交后禁用按钮和选择功能
+        quizBox.querySelector('.btn-submit').disabled = true;
+        const rows = quizBox.querySelectorAll('.option-row');
+        rows.forEach(r => r.style.pointerEvents = "none");
+    }
+</script>
+
+</body>
+</html>

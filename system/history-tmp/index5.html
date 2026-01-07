@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理咨询师基础培训考试 - 全功能备考门户</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #3498db;
+            --warning: #f39c12;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        body { font-family: "PingFang SC", "Microsoft YaHei", sans-serif; line-height: 1.6; margin: 0; background-color: var(--light); color: #333; }
+        header { background: var(--primary); color: white; padding: 2.5rem 1rem; text-align: center; }
+        .container { max-width: 1000px; margin: -20px auto 40px; padding: 30px; background: var(--white); border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        
+        h2.section-title { border-left: 6px solid var(--accent); padding-left: 15px; margin: 40px 0 20px; color: var(--primary); font-size: 1.4rem; }
+        
+        /* 知识图谱 */
+        .map-card { background: #f9f9f9; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .map-card h3 { color: var(--secondary); margin-top: 0; border-bottom: 2px solid #eee; }
+
+        /* 机构联动查询 */
+        .query-box { background: #eef2f7; padding: 20px; border-radius: 8px; }
+        select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        #resultList { list-style: none; padding: 0; margin-top: 15px; background: white; border-radius: 6px; border: 1px solid #ddd; }
+        #resultList li { padding: 10px 15px; border-bottom: 1px solid #eee; }
+
+        /* 习题模块：整行选中 */
+        .quiz-item { background: #fff; border: 1px solid #eee; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .option-row { 
+            display: flex; align-items: center; padding: 12px; margin: 8px 0; 
+            background: #fcfcfc; border: 1px solid #f0f0f0; border-radius: 6px; 
+            cursor: pointer; transition: 0.2s; 
+        }
+        .option-row:hover { background: #eef7ff; border-color: var(--accent); }
+        .option-row input { margin-right: 15px; pointer-events: none; } /* 禁用input原生点击，统一由Row处理 */
+        
+        .btn-submit { background: var(--accent); color: white; border: none; padding: 10px 25px; border-radius: 4px; cursor: pointer; }
+        .explanation { display: none; margin-top: 15px; padding: 15px; border-radius: 4px; font-size: 0.95rem; }
+
+        /* 资料下载：新页面打开 */
+        .download-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .dl-btn { display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-decoration: none; color: #333; transition: 0.2s; }
+        .dl-btn:hover { border-color: var(--warning); background: #fff9f0; transform: translateY(-2px); }
+        .dl-icon { background: var(--warning); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; }
+
+        footer { text-align: center; padding: 40px; color: #888; border-top: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>心理咨询师基础培训·考证服务门户</h1>
+    <p>全套单元作业资源 1:1 深度同步</p>
+</header>
+
+<div class="container">
+    
+    <h2 class="section-title">备考知识大纲</h2>
+    <div class="map-card">
+        <h3>九大章节核心逻辑</h3>
+        <p>1. <b>基础理论</b>：基础心理学(冯特实验室)、社会心理学(B=f(P,E))、发展心理学(皮亚杰)。</p>
+        <p>2. <b>临床心理</b>：变态心理学(区分原则)、咨询概论(动力学派)、伦理(九步骤模式)。</p>
+        <p>3. <b>操作实务</b>：心理评估(个案概念化)、基本技能(尊重共情)、咨询方法(阳性强化/合理情绪)。</p>
+    </div>
+    
+
+    <h2 class="section-title">授权培训机构查询</h2>
+    <div class="query-box">
+        <select id="provinceSelect"><option value="">-- 请选择您的省份 --</option></select>
+        <ul id="resultList"><li>请先选择省份以查看名单...</li></ul>
+    </div>
+
+    <h2 class="section-title">单元模拟练习 (支持整行点击)</h2>
+    <div id="quizContainer">
+        <div class="quiz-item" id="q1">
+            <p>1.【基础心理学】科学心理学的创始人是（ ）。</p>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="C"> C. 冯特</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q1" value="D"> D. 弗洛伊德</div>
+            <button class="btn-submit" onclick="checkAnswer('q1', 'C', '1879年冯特在莱比锡大学建立第一个心理实验室。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+        <div class="quiz-item" id="q2">
+            <p>2.【社会心理学】社会行为公式 B=f(P,E) 中，P 指的是（ ）。</p>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="C"> C. 个体</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q2" value="D"> D. 情境</div>
+            <button class="btn-submit" onclick="checkAnswer('q2', 'C', '勒温指出行为是个体及其所处情境的函数。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+        <div class="quiz-item" id="q6">
+            <p>3.【伦理】Welfel提出的伦理决定模式共有（ ）个步骤。</p>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="A"> A. 八步骤</div>
+            <div class="option-row" onclick="selectRow(this)"><input type="radio" name="q6" value="B"> B. 九步骤</div>
+            <button class="btn-submit" onclick="checkAnswer('q6', 'B', 'Welfel(1998) 提出的伦理决定模式为九步骤。')">提交</button>
+            <div class="explanation"></div>
+        </div>
+    </div>
+    
+
+    <h2 class="section-title">单元作业资源下载 (PDF 预览)</h2>
+    <div class="download-grid">
+        <a href="第一章-基础心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>第一章 基础心理学</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第二章-社会心理学单元作业题.pdf" target="_blank" class="dl-btn"><span>第二章 社会心理学</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第三章-发展心理学单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第三章 发展心理学</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第四章-变态心理学单元作业题(3).pdf" target="_blank" class="dl-btn"><span>第四章 变态心理学</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第五章-心理咨询概论单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第五章 心理咨询概论</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第六章 心理咨询伦理单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第六章 心理咨询伦理</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第七章 心理评估单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第七章 心理评估</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第八章 心理咨询基本技能单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第八章 基本技能</span><span class="dl-icon">新页面打开</span></a>
+        <a href="第九章 心理咨询方法单元作业题(2).pdf" target="_blank" class="dl-btn"><span>第九章 心理咨询方法</span><span class="dl-icon">新页面打开</span></a>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 心理咨询师备考助手 | 资源基于 2024 中科院培训标准</p>
+</footer>
+
+<script>
+    // --- 1. 机构查询数据逻辑 ---
+    var Apro = ["北京","天津","河北","山西","内蒙古","辽宁","吉林","黑龙江","上海","江苏","浙江","安徽","福建","江西","山东","河南","湖北","湖南","广东","广西","海南","重庆","四川","贵州","云南","陕西","甘肃","青海","宁夏","新疆","行业"];
+    var Aorg = [["北京华夏思源","北京环球优路"], ["华人(天津)心理","听心教育"], ["石家庄天心","唐山鸿达"], ["临汾心理协会","山西心悦"], ["包头陈欣","内蒙古新动力"], ["大连红叶","沈阳智虹"], ["长春思源","吉林明华"], ["哈尔滨曲伟杰","黑龙江诚爱"], ["上海德瑞姆","上海和光"], ["南京优路","苏州常青树"], ["杭州袋虎","温州心理协会"], ["安徽省播健","合肥阳光心健"], ["厦门心理协会","福建众一泰"], ["江西南大心理","九江兰心"], ["山东省社会心理学会","青岛瑞阳"], ["河南心能量","洛阳众成"], ["湖北省心理协会","武汉华夏心灵"], ["湖南省会天","长沙蓝宇"], ["广州上馨","深圳瀚思","金玉心理"], ["北海心理协会","广西中燚"], ["海南朗达","海大源培训"], ["重庆爱源","创富管理"], ["成都华商","四川省心理学会"], ["贵阳亚夫","黔东南心理协会"], ["昆明心路明非","云南民航学院"], ["陕西海尔森","西安学府"], ["甘肃省心理咨询师学会"], ["青海易心"], ["银川心理卫生协会"], ["新疆泰能"], ["深圳市和家","梦课在线"]];
+
+    const pSel = document.getElementById('provinceSelect');
+    const rList = document.getElementById('resultList');
+
+    Apro.forEach((n, i) => {
+        let o = document.createElement('option');
+        o.value = i; o.textContent = n;
+        pSel.appendChild(o);
+    });
+
+    pSel.onchange = function() {
+        rList.innerHTML = '';
+        if(!this.value) { rList.innerHTML = '<li>请选择省份</li>'; return; }
+        (Aorg[this.value] || []).forEach(org => {
+            let li = document.createElement('li');
+            li.textContent = org;
+            rList.appendChild(li);
+        });
+    };
+
+    // --- 2. 习题整行选中逻辑 ---
+    function selectRow(el) {
+        const radio = el.querySelector('input[type="radio"]');
+        radio.checked = true;
+        // 清除同组样式并高亮当前
+        const siblings = el.parentElement.querySelectorAll('.option-row');
+        siblings.forEach(s => s.style.background = '#fcfcfc');
+        el.style.background = '#eef7ff';
+    }
+
+    // --- 3. 答案检查逻辑 ---
+    function checkAnswer(qid, correct, note) {
+        const item = document.getElementById(qid);
+        const checked = item.querySelector('input:checked');
+        const exp = item.querySelector('.explanation');
+        
+        if(!checked) { alert("请先选择一个选项！"); return; }
+        
+        exp.style.display = 'block';
+        if(checked.value === correct) {
+            exp.innerHTML = "✅ <b>回答正确！</b><br>" + note;
+            exp.style.background = "#e8f5e9"; exp.style.color = "#2e7d32";
+        } else {
+            exp.innerHTML = "❌ <b>回答错误。</b> 正确答案是 " + correct + "。<br>" + note;
+            exp.style.background = "#ffebee"; exp.style.color = "#c62828";
+        }
+        item.querySelector('.btn-submit').disabled = true;
+    }
+</script>
+
+</body>
+</html>
