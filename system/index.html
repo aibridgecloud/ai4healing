@@ -82,13 +82,32 @@
         .dl-icon { background: var(--warning); color: white; padding: 2px 10px; border-radius: 4px; font-size: 0.8rem; }
 
         footer { text-align: center; padding: 50px; color: #888; border-top: 1px solid #eee; }
+
+
+   /* 校验时的遮罩层 */
+        #auth-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: flex; justify-content: center; align-items: center;
+            z-index: 9999; flex-direction: column;
+        }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary-color); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
+
+<div id="auth-overlay">
+    <div class="spinner"></div>
+    <p style="margin-top: 15px; color: #666;">正在核验准考身份...</p>
+</div>
+
+
 <header>
     <h1>心理咨询师基础培训考试系统</h1>
     <p>集成资料、查询、学习与模拟测试于一体的备考门户</p>
+ <div class="user-info" id="display-user">加载中...</div>
 </header>
 
 <div class="container">
@@ -377,6 +396,54 @@
         const rows = quizBox.querySelectorAll('.option-row');
         rows.forEach(r => r.style.pointerEvents = "none");
     }
+
+
+ /**
+     * 核心校验算法：手机号 + 身份证号 + 盐值 -> 4位数字密码
+     */
+    async function verify4DigitPassword(phone, idCard, inputPassword) {
+        const SALT = "PSY_EXAM_SECRET_2026"; // 必须与密码发放时的盐值一致
+        const combinedStr = phone + idCard + SALT;
+        const msgUint8 = new TextEncoder().encode(combinedStr);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+        const view = new DataView(new Uint8Array(hashArray).buffer);
+        // 取最后4个字节的哈希值进行运算
+        const lastFourBytes = view.getUint32(hashArray.length - 4); 
+        const expectedPassword = (lastFourBytes % 10000).toString().padStart(4, '0');
+
+        return inputPassword === expectedPassword;
+    }
+
+    /**
+     * 初始化页面并执行校验
+     */
+    window.onload = async function() {
+        const params = new URLSearchParams(window.location.search);
+        const phone = params.get('phone');
+        const idCard = params.get('idCard');
+        const pwd = params.get('password');
+
+        // 1. 基础存在校验
+        if (!phone || !idCard || !pwd) {
+            alert("未检测到登录信息，请重新登录");
+            window.location.href = "login.html";
+            return;
+        }
+
+        // 2. 算法校验
+        const isValid = await verify4DigitPassword(phone, idCard, pwd);
+
+        if (!isValid) {
+            alert("身份校验失败：准考证信息与密码不匹配！");
+            window.location.href = "login.html";
+        } else {
+            // 3. 校验通过，移除遮罩并显示用户信息
+            document.getElementById('auth-overlay').style.display = 'none';
+            document.getElementById('display-user').innerText = `欢迎，考生：${phone.substring(0,3)}****${phone.substring(7)}`;
+        }
+    };
 </script>
 
 </body>

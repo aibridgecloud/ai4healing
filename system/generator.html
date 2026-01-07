@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>密码生成工具 - 心理咨询师考试系统</title>
+    <style>
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #fff; padding: 30px; border-radius: 12px; shadow: 0 4px 15px rgba(0,0,0,0.1); width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        h2 { color: #2C3E50; text-align: center; margin-bottom: 25px; }
+        .field { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #666; font-size: 14px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #2980b9; }
+        #result-box { margin-top: 25px; padding: 15px; background: #e8f6f3; border-radius: 8px; display: none; text-align: center; }
+        .password-display { font-size: 32px; font-weight: bold; color: #16a085; letter-spacing: 5px; margin: 10px 0; }
+        .tips { font-size: 12px; color: #999; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>学员密码生成器</h2>
+    <div class="field">
+        <label>学员手机号</label>
+        <input type="text" id="phone" placeholder="请输入11位手机号">
+    </div>
+    <div class="field">
+        <label>学员身份证号</label>
+        <input type="text" id="idCard" placeholder="请输入18位身份证号">
+    </div>
+    <button onclick="generatePassword()">立即计算 4 位密码</button>
+
+    <div id="result-box">
+        <div style="font-size: 14px; color: #666;">计算结果（请发放给学员）:</div>
+        <div class="password-display" id="outPwd">0000</div>
+        <div class="tips">该密码由 [手机+身份证+系统盐值] 算法唯一生成</div>
+    </div>
+</div>
+
+<script>
+    /**
+     * 核心算法：必须与 dashboard.html 保持 100% 同步
+     */
+    async function generatePassword() {
+        const phone = document.getElementById('phone').value.trim();
+        const idCard = document.getElementById('idCard').value.trim();
+        
+        if (phone.length !== 11 || idCard.length < 15) {
+            alert("请输入正确的手机号和身份证号！");
+            return;
+        }
+
+        const SALT = "PSY_EXAM_SECRET_2026"; // 核心盐值
+        const combinedStr = phone + idCard + SALT;
+        
+        // 计算 SHA-256
+        const msgUint8 = new TextEncoder().encode(combinedStr);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const view = new DataView(new Uint8Array(hashArray).buffer);
+        
+        // 取最后4个字节并取模 10000
+        const lastFourBytes = view.getUint32(hashArray.length - 4); 
+        const resultPwd = (lastFourBytes % 10000).toString().padStart(4, '0');
+
+        // 显示结果
+        document.getElementById('outPwd').innerText = resultPwd;
+        document.getElementById('result-box').style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
