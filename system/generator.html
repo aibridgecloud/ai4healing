@@ -29,11 +29,11 @@
         <label>学员身份证号</label>
         <input type="text" id="idCard" placeholder="请输入18位身份证号">
     </div>
-    <button onclick="generatePassword()">立即计算 4 位密码</button>
 
+    <button onclick="generateLetterPassword()">生成 6 位大写字母密码</button>
     <div id="result-box">
         <div style="font-size: 14px; color: #666;">计算结果（请发放给学员）:</div>
-        <div class="password-display" id="outPwd">0000</div>
+        <div class="password-display" id="outPwd" style="letter-spacing: 2px;">------</div>
         <div class="tips">该密码由 [手机+身份证+系统盐值] 算法唯一生成</div>
     </div>
 </div>
@@ -42,29 +42,21 @@
     /**
      * 核心算法：必须与 dashboard.html 保持 100% 同步
      */
-    async function generatePassword() {
+    async function generateLetterPassword() {
         const phone = document.getElementById('phone').value.trim();
         const idCard = document.getElementById('idCard').value.trim();
+        const SALT = "PSY_EXAM_SECRET_2026";
         
-        if (phone.length !== 11 || idCard.length < 15) {
-            alert("请输入正确的手机号和身份证号！");
-            return;
-        }
-
-        const SALT = "PSY_EXAM_SECRET_2026"; // 核心盐值
-        const combinedStr = phone + idCard + SALT;
-        
-        // 计算 SHA-256
-        const msgUint8 = new TextEncoder().encode(combinedStr);
+        const msgUint8 = new TextEncoder().encode(phone + idCard + SALT);
         const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const view = new DataView(new Uint8Array(hashArray).buffer);
         
-        // 取最后4个字节并取模 10000
-        const lastFourBytes = view.getUint32(hashArray.length - 4); 
-        const resultPwd = (lastFourBytes % 10000).toString().padStart(4, '0');
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let resultPwd = "";
+        for (let i = 0; i < 6; i++) {
+            resultPwd += letters[hashArray[i] % 26];
+        }
 
-        // 显示结果
         document.getElementById('outPwd').innerText = resultPwd;
         document.getElementById('result-box').style.display = 'block';
     }

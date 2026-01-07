@@ -398,23 +398,27 @@
     }
 
 
- /**
-     * 核心校验算法：手机号 + 身份证号 + 盐值 -> 4位数字密码
-     */
-    async function verify4DigitPassword(phone, idCard, inputPassword) {
-        const SALT = "PSY_EXAM_SECRET_2026"; // 必须与密码发放时的盐值一致
-        const combinedStr = phone + idCard + SALT;
-        const msgUint8 = new TextEncoder().encode(combinedStr);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
+    /**
+ * 核心校验算法：手机号 + 身份证号 + 盐值 -> 6位大写字母
+ */
+async function verify6LetterPassword(phone, idCard, inputPassword) {
+    const SALT = "PSY_EXAM_SECRET_2026"; 
+    const combinedStr = phone + idCard + SALT;
+    const msgUint8 = new TextEncoder().encode(combinedStr);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
 
-        const view = new DataView(new Uint8Array(hashArray).buffer);
-        // 取最后4个字节的哈希值进行运算
-        const lastFourBytes = view.getUint32(hashArray.length - 4); 
-        const expectedPassword = (lastFourBytes % 10000).toString().padStart(4, '0');
-
-        return inputPassword === expectedPassword;
+    // 使用哈希的前6个字节，每个字节映射到一个字母
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let expectedPassword = "";
+    for (let i = 0; i < 6; i++) {
+        // 取哈希字节对26取模，得到A-Z的索引
+        expectedPassword += letters[hashArray[i] % 26];
     }
+
+    return inputPassword.toUpperCase() === expectedPassword;
+}
+
 
     /**
      * 初始化页面并执行校验
@@ -433,7 +437,7 @@
         }
 
         // 2. 算法校验
-        const isValid = await verify4DigitPassword(phone, idCard, pwd);
+        const isValid = await verify6LetterPassword(phone, idCard, pwd);
 
         if (!isValid) {
             alert("身份校验失败：准考证信息与密码不匹配！");
@@ -443,6 +447,7 @@
             document.getElementById('auth-overlay').style.display = 'none';
             document.getElementById('display-user').innerText = `欢迎，考生：${phone.substring(0,3)}****${phone.substring(7)}`;
         }
+
     };
 </script>
 

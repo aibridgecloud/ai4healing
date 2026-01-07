@@ -30,10 +30,11 @@
             <input type="text" id="idCard" placeholder="请输入18位身份证号" required>
         </div>
         <div class="input-group">
-            <label>登录密码</label>
-            <input type="password" id="password" placeholder="请输入密码" required>
+            <label>准考密码 (6位大写字母)</label>
+            <input type="text" id="password" placeholder="请输入6位大写字母密码" required 
+                   minlength="6" maxlength="6" style="text-transform: uppercase;">
         </div>
-        <button type="submit" class="btn-login">立即进入学习系统</button>
+        <button type="submit" class="btn-login">登录系统</button>
     </form>
     <div class="footer-link">
         <p>© 心理咨询师培训备考系统 - 2026</p>
@@ -42,17 +43,12 @@
 
 <script>
     document.getElementById('loginForm').onsubmit = function(e) {
-        e.preventDefault(); // 阻止默认提交
-
-        // 获取数据
+        e.preventDefault();
         const phone = document.getElementById('phone').value;
         const idCard = document.getElementById('idCard').value;
-        const password = document.getElementById('password').value;
+        const password = document.getElementById('password').value.toUpperCase(); // 强制转大写传参
 
-        // 构建跳转URL 
-        const targetUrl = `index.html?phone=${encodeURIComponent(phone)}&idCard=${encodeURIComponent(idCard)}&password=${encodeURIComponent(password)}`;
-        
-        // 执行跳转
+        const targetUrl = `dashboard.html?phone=${encodeURIComponent(phone)}&idCard=${encodeURIComponent(idCard)}&password=${encodeURIComponent(password)}`;
         window.location.href = targetUrl;
     };
 </script>
